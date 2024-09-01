@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: silver-layer-job
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - name: silver
+        image: creditgoldeacr.azurecr.io/silver:latest
+        env:
+        - name: AZURE_STORAGE_ACCOUNT
+          value: "credit_storage_gold"
+        - name: AZURE_STORAGE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: azure-secret
+              key: azure-storage-key
+      restartPolicy: Never
+  backoffLimit: 4
