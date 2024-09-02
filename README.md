@@ -1,5 +1,10 @@
 Credit lending demo
 
+Solution 
+==========
+ We are deploy a robust, scalable, and containerized data pipeline on Azure Kubernetes Service, orchestrated seamlessly
+ with Apache Airflow. I prefer this setup  as this will very close to ensures modularity, ease of maintenance, and scalability to handle varying data volumes and processing requirements.
+
 Basic Set up:
 =============
 

@@ -3,5 +3,6 @@ faker
 delta-spark
 pylint
 black
+pydeequ
 
 pytest
