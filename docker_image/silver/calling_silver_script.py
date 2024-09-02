@@ -1,8 +1,7 @@
 # Import
 import pyspark
-from pyspark.sql.functions import col
-from pyspark.sql import functions as f
 from delta import *
+from pydeequ.analyzers import *
 
 
 def read_data():
@@ -16,6 +15,19 @@ def read_data():
         .json("../datalake/bronze_layer/stocks.json")
     clients_df = spark.read.csv("../datalake/bronze_layer/Clients.csv", header=True, inferSchema=True)
     collaterals_df = spark.read.csv("../datalake/bronze_layer/Collaterals.csv", header=True, inferSchema=True)
+
+
+
+    # check Data Quality for stock
+
+    stock_analysis=AnalysisRunner(spark).onData(stocks_df).addAnalyzer(Size())\
+                    .addAnalyzer(Completeness("stock_id"))\
+                    .addAnalyzer(ApproxCountDistinct("stock_id"))
+    stock_analysis_df=AnalyzerContext.successMetricsAsDataFrame(spark,stock_analysis)
+    stock_analysis_df.show()
+
+    # Similary for other dataset
+
 
     # save to silver layer
     stocks_df.write.mode(saveMode="overwrite").format("delta").save("../datalake/silver_layer/stocks-table")
